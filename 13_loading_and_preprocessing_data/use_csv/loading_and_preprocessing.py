@@ -9,35 +9,34 @@ import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-np.random.seed(42)
-
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-mpl.rc('axes', labelsize=14)
-mpl.rc('xtick', labelsize=12)
-mpl.rc('ytick', labelsize=12)
-
-# 그림을 저장할 위치
-PROJECT_ROOT_DIR = "."
-CHAPTER_ID = "data"
-IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
-os.makedirs(IMAGES_PATH, exist_ok=True)
-
-
-def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
-    path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
-    print("그림 저장:", fig_id)
-    if tight_layout:
-        plt.tight_layout()
-    plt.savefig(path, format=fig_extension, dpi=resolution)
+# np.random.seed(42)
+#
+# import matplotlib as mpl
+# import matplotlib.pyplot as plt
+# mpl.rc('axes', labelsize=14)
+# mpl.rc('xtick', labelsize=12)
+# mpl.rc('ytick', labelsize=12)
+#
+# # 그림을 저장할 위치
+# PROJECT_ROOT_DIR = "."
+# CHAPTER_ID = "data"
+# IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
+# os.makedirs(IMAGES_PATH, exist_ok=True)
+#
+#
+# def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+#     path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
+#     print("그림 저장:", fig_id)
+#     if tight_layout:
+#         plt.tight_layout()
+#     plt.savefig(path, format=fig_extension, dpi=resolution)
 #############################################################################
 
-
-print()
-print("# dataSet = tf.data.Dataset.range(10) #")
 X = tf.range(10)
 dataset = tf.data.Dataset.from_tensor_slices(X)
 # dataset = tf.data.Dataset.range(10) # 위 두줄과 동일
+print()
+print("# dataSet = tf.data.Dataset.range(10) #")
 print(dataset)
 
 print()
@@ -190,6 +189,7 @@ for line in dataset.take(5):
 n_inputs = 8    # X_train.shape[-1]
 
 
+@tf.autograph.experimental.do_not_convert
 @tf.function
 def preprocess(line):
     defs = [0.] * n_inputs + [tf.constant([], dtype=tf.float32)]
@@ -226,6 +226,7 @@ tf.random.set_seed(42)
 print()
 print("# 데이터 적재와 전처리 합치기 #")
 print("# 캘리포니아 주택 데이터 적재 + 스케일 조정 전처리 #")
+print()
 print("# 총 11609개 샘플이 있어, 상단 1개 샘플만 표기 #")
 train_set = csv_reader_dataset(train_filepaths, batch_size=1)
 for X_batch, y_batch in train_set.take(1):
@@ -245,7 +246,7 @@ model = keras.models.Sequential([
     keras.layers.Dense(30, activation="relu", input_shape=X_train.shape[1:]),
     keras.layers.Dense(1),
 ])
-model.compile(loss="mse", optimizer=keras.optimizers.SGD(lr=1e-3))
+model.compile(loss="mse", optimizer=keras.optimizers.SGD(learning_rate=1e-3))
 batch_size = 32
 model.fit(train_set, steps_per_epoch=len(X_train) // batch_size, epochs=10,
           validation_data=valid_set)
@@ -261,7 +262,7 @@ keras.backend.clear_session()
 np.random.seed(42)
 tf.random.set_seed(42)
 
-optimizer = keras.optimizers.Nadam(lr=0.01)
+optimizer = keras.optimizers.Nadam(learning_rate=0.01)
 loss_fn = keras.losses.mean_squared_error
 
 
@@ -283,4 +284,5 @@ def train(model, n_epochs, batch_size=32,
 train(model, 5)
 
 print()
+print("# 전체 훈련 반복 수행 텐서플로 함수 #")
 print(model.predict(new_set, steps=len(X_new) // batch_size))
