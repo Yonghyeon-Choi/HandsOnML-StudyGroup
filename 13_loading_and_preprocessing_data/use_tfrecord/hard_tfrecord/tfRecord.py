@@ -7,7 +7,7 @@ from tensorflow import keras
 assert tf.__version__ >= "2.0"
 import numpy as np
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = ''
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 BytesList = tf.train.BytesList
@@ -28,7 +28,7 @@ person_example = Example(
 with tf.io.TFRecordWriter("my_contacts.tfrecord") as f:
     f.write(person_example.SerializeToString())
 
-print()
+
 feature_description = {
     "name": tf.io.FixedLenFeature([], tf.string, default_value=""),
     "id": tf.io.FixedLenFeature([], tf.int64, default_value=0),
@@ -40,6 +40,7 @@ for serialized_example in tf.data.TFRecordDataset(["my_contacts.tfrecord"]):
     parsed_example = tf.io.parse_single_example(serialized_example,
                                                 feature_description)
 
+print()
 print(parsed_example)
 print(parsed_example["name"])
 print(parsed_example["id"])

@@ -7,7 +7,7 @@ from tensorflow import keras
 assert tf.__version__ >= "2.0"
 import numpy as np
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = ''
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 with tf.io.TFRecordWriter("my_data.tfrecord") as f:
