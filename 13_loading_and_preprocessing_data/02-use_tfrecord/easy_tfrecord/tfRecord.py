@@ -3,9 +3,7 @@ assert sys.version_info >= (3, 5)
 import sklearn
 assert sklearn.__version__ >= "0.20"
 import tensorflow as tf
-from tensorflow import keras
 assert tf.__version__ >= "2.0"
-import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
