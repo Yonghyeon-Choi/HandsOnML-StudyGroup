@@ -9,32 +9,12 @@ import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-# np.random.seed(42)
-#
-# import matplotlib as mpl
-# import matplotlib.pyplot as plt
-# mpl.rc('axes', labelsize=14)
-# mpl.rc('xtick', labelsize=12)
-# mpl.rc('ytick', labelsize=12)
-#
-# # 그림을 저장할 위치
-# PROJECT_ROOT_DIR = "."
-# CHAPTER_ID = "data"
-# IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
-# os.makedirs(IMAGES_PATH, exist_ok=True)
-#
-#
-# def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
-#     path = os.path.join(IMAGES_PATH, fig_id + "." + fig_extension)
-#     print("그림 저장:", fig_id)
-#     if tight_layout:
-#         plt.tight_layout()
-#     plt.savefig(path, format=fig_extension, dpi=resolution)
 #############################################################################
 
 X = tf.range(10)
 dataset = tf.data.Dataset.from_tensor_slices(X)
 # dataset = tf.data.Dataset.range(10) # 위 두줄과 동일
+tmp = dataset
 print()
 print("# dataSet = tf.data.Dataset.range(10) #")
 print(dataset)
@@ -43,7 +23,6 @@ print()
 print("# item in dataset #")
 for item in dataset:
     print(item)
-tmp = dataset
 
 # repeat(): 원본 데이터셋의 아이템을 N차례 반복하는 새로운 데이터셋을 반환 (복사하는 것은 아님)
 # batch() : 아이템을 N개의 그룹으로 묶는다
@@ -117,7 +96,7 @@ X_train_full, X_test, y_train_full, y_test = train_test_split(
 X_train, X_valid, y_train, y_valid = train_test_split(
     X_train_full, y_train_full, random_state=42)
 
-scaler = StandardScaler()
+scaler = StandardScaler()   # 평균과 정규화된 데이터를 구하는 과정
 scaler.fit(X_train)
 X_mean = scaler.mean_
 X_std = scaler.scale_
@@ -143,7 +122,7 @@ def save_to_multiple_csv_files(data, name_prefix, header=None, n_parts=10):
     return filepaths
 
 
-train_data = np.c_[X_train, y_train]
+train_data = np.c_[X_train, y_train]    # np.c_ : X_train 오른쪽에 y_train을 붙임
 valid_data = np.c_[X_valid, y_valid]
 test_data = np.c_[X_test, y_test]
 header_cols = housing.feature_names + ["MedianHouseValue"]
@@ -156,7 +135,7 @@ test_filepaths = save_to_multiple_csv_files(test_data, "test", header, n_parts=1
 import pandas as pd
 
 print()
-print("# 데이터 적재 | dataset head #")
+print("# 데이터 적재 | dataset \"my_train_00.csv\" head #")
 print(pd.read_csv(train_filepaths[0]).head())
 
 print()
@@ -284,5 +263,5 @@ def train(model, n_epochs, batch_size=32,
 train(model, 5)
 
 print()
-print("# 전체 훈련 반복 수행 텐서플로 함수 #")
+print("# 전체 훈련 반복 수행 #")
 print(model.predict(new_set, steps=len(X_new) // batch_size))
