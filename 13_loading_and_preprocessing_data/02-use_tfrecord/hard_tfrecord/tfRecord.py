@@ -136,6 +136,7 @@ print(sequence_example)
 
 print("# sequence_example 객체를 직열화 #")
 serialized_sequence_example = sequence_example.SerializeToString()
+print(serialized_sequence_example)
 
 print()
 print("# 직렬화한 sequence_example 객체를 초기화할 placeholder 구성 #")

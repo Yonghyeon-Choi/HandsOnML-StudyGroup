@@ -53,7 +53,7 @@ print(housing_median_age)
 
 print()
 print("# bucketized_age 텐서 #")
-print("#  housing_median_age 텐서를 구간 분할해 범주화한 텐서 #")
+print("# housing_median_age 텐서를 구간 분할해 범주화한 텐서 #")
 print('# ~1.0 / -1.0~-0.5 / -0.5~0 / 0~0.5 / 0.5~1.0 / 1.0~ #')
 bucketized_age = tf.feature_column.bucketized_column(
     housing_median_age, boundaries=[-1., -0.5, 0., 0.5, 1.])
@@ -86,7 +86,7 @@ print(ocean_proximity)
 print()
 print("# age_and_ocean_proximity 텐서 #")
 print("# bucketized_age, ocean_proximity 텐서를 묶은 텐서 #")
-print("# [bucketized_latitude, bucketized_longitude] #")
+print("# [bucketized_age, ocean_proximity] #")
 age_and_ocean_proximity = tf.feature_column.crossed_column(
     [bucketized_age, ocean_proximity], hash_bucket_size=100)
 
